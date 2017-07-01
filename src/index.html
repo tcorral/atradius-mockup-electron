@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="nl_NL">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <base href="/" />
+    <title>Atradius - 2976 - New bond request creation</title>
+    <link rel="stylesheet" href="../jspm_packages/github/twbs/bootstrap@3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body ng-controller="RequestBondController as $ctrl">
+    <header class="container">
+      <!-- Header line -->
+      <!-- TODO: Make responsive for xs -->
+      <div class="header-line">
+        <div class="header-line-border"></div>
+      </div>
+
+      <!-- Logo -->
+      <img src="img/atradius-logo.png" width="175" height="48" title="Atradius" alt="Logo" />
+
+      <!-- Language switch -->
+      <div class="dropdown pull-right ng-cloak" uib-dropdown ng-if="$ctrl.$state.current.name === 'home'">
+        <button class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
+          {{ 'Change Country' | translate }}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu>
+          <li ng-class="{disabled: $ctrl.currentLanguage == language}" ng-repeat="language in $ctrl.$translate.getAvailableLanguageKeys()">
+            <a href="javascript:void(0)" ng-click="$ctrl.changeLanguage(language)">{{ $ctrl.getMainLanguageKey(language); }} </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <!-- App Loader -->
+        <div class="appLoader" ng-hide="$ctrl.viewContentLoaded"></div>
+
+        <div class="panel panel-default ng-cloak">
+          <div class="panel-body">
+            <!-- UI View -->
+            <ui-view></ui-view>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!--<main ng-include="'/src/partials/main.html'"></main>-->
+
+    <script type="text/javascript" src="jspm_packages/system.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript">
+      SystemJS
+        .import('./dist/index.js');
+    </script>
+  </body>
+</html>

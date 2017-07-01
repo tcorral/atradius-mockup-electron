@@ -1,0 +1,214 @@
+<div>
+  <h3>{{ 'Request new bond' | translate }}</h3>
+  <form name="formRequestBond" ng-submit="$ctrl.requestBond()">
+    <!-- Company -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h5 style="cursor: pointer;" ng-click="$ctrl.isCustomerOpen = !$ctrl.isCustomerOpen"><i class="glyphicon" ng-class="{'glyphicon-chevron-up': !$ctrl.isCustomerOpen, 'glyphicon-chevron-down': $ctrl.isCustomerOpen }"></i> {{ 'Customer Data' | translate }} </h5>
+      </div>
+      <div class="panel-body collapse in" uib-collapse="$ctrl.isCustomerOpen">
+        <div class="form-group col-sm-3">
+          <img src="{{ $ctrl.user.company.logo }}" class="img-responsive" />
+        </div>
+        <div class="col-sm-6 col-sm-offset-3">
+          <div class="form-group">
+            <label for="customerName" class="control-label">{{ 'Name' | translate}}</label>
+            <input type="text" id="customerName" class="form-control" name="customerName" value="{{ $ctrl.user.company.name }}" disabled="disabled" />
+          </div>
+          <div class="form-group">
+            <label for="legalHeadquarter" class="control-label">{{ 'Legal Headquarter' | translate}}</label>
+            <input type="text" id="legalHeadquarter" class="form-control" name="policyExpirationDate" value="{{ $ctrl.user.company.address + ', ' + $ctrl.user.company.zipCode + ' ' + $ctrl.user.company.city }}" disabled="disabled" />
+          </div>
+          <div class="form-group">
+            <label for="fiscalCode" class="control-label">{{ 'Fiscal Code/VAT number' | translate }}</label>
+            <input type="text" id="fiscalCode" class="form-control" name="policyExpirationDate" value="{{ $ctrl.user.company.fiscalCode }}" disabled="disabled" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Policy -->
+    <div class="panel panel-default" ng-if="$ctrl.user.policy">
+      <div class="panel-heading">
+        <h5 style="cursor: pointer;" ng-click="$ctrl.isPolicyOpen = !$ctrl.isPolicyOpen"><i class="glyphicon" ng-class="{'glyphicon-chevron-up': $ctrl.isPolicyOpen, 'glyphicon-chevron-down': !$ctrl.isPolicyOpen }"></i> {{ 'Policy data' | translate }} </h5>
+      </div>
+      <div class="panel-body collapse in" uib-collapse="!$ctrl.isPolicyOpen">
+        <div class="form-group col-sm-6">
+          <label for="policyId" class="control-label">{{ 'Id' | translate}}</label>
+          <input type="text" id="policyId" class="form-control" name="policyId" value="{{ $ctrl.user.policy.id }}" disabled="disabled" />
+        </div>
+        <div class="form-group col-sm-6">
+          <label for="policyExpirationDate" class="control-label">{{ 'Expiration' | translate}}</label>
+          <input type="text" id="policyExpirationDate" class="form-control" name="policyExpirationDate" value="{{ $ctrl.user.policy.expirationDate }}" disabled="disabled" />
+        </div>
+        <div class="form-group col-sm-12">
+          <label class="control-label">{{ 'Usage' | translate }}</label>
+          <uib-progressbar type="{{$ctrl.getProgressbarColor()}}" value="$ctrl.getPercentagePolicyCredit()" max="100" type="success"><strong>{{ $ctrl.getLeftCreditPlusAmount() | currency:"":0 }}</strong> / {{ $ctrl.policy.credit.total | currency:"":0 }}</uib-progressbar>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Bond class -->
+      <div class="form-group col-sm-4 has-success">
+        <label for="bondClass" class="control-label">{{ 'Bond Class' | translate}}</label>
+        <input type="text" id="bondClass" class="form-control" name="bondClass" value="{{ $ctrl.user.bond.class }}" disabled="disabled" />
+      </div>
+      <!-- Bond type -->
+      <div class="form-group col-sm-4" ng-class="$ctrl.getClasses('bondType', formRequestBond)">
+        <label for="bondType" class="control-label">{{ 'Bond type' | translate }}</label>
+        <select id="bondType" class="form-control" name="bondType" ng-model="$ctrl.model.bondType" ng-options="bt as bt.name for bt in $ctrl.user.bond.types" required></select>
+      </div>
+      <!-- Bond risk -->
+      <div class="form-group col-sm-4" ng-class="$ctrl.getClasses('bondRisk', formRequestBond)">
+        <label for="bondRisk" class="control-label">{{ 'Bond risk' | translate }}</label>
+        <select id="bondRisk" class="form-control" name="bondRisk" ng-model="$ctrl.model.bondRisk" ng-options="br as br.name for br in $ctrl.model.bondType.risks" ng-disabled="!$ctrl.model.bondType" required></select>
+      </div>
+    </div>
+
+    <!-- Beneficiary -->
+    <div class="form-group" ng-class="$ctrl.getClasses('beneficiary', formRequestBond)">
+      <label for="beneficiary" class="control-label">{{ 'Beneficiary' | translate }}</label>
+      <div class="input-group">
+        <select id="beneficiary" class="form-control" name="beneficiary" ng-model="$ctrl.model.beneficiary" ng-options="bf as bf.name for bf in $ctrl.user.beneficiaries" required></select>
+        <div class="input-group-btn">
+          <button class="btn btn-success" type="button" ng-click="$ctrl.openAddBeneficiaryModal()">+ {{ 'Add beneficiary' | translate }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Effective date -->
+      <div class="form-group col-sm-4" ng-class="$ctrl.getClasses('effectiveDate', formRequestBond)">
+        <label for="effectiveDate" class="control-label">{{ 'Effective Date' | translate }}</label>
+          <div class="input-group">
+            <input 
+                type="text" id="effectiveDate" name="effectiveDate" class="form-control" placeholder="yyyy-mm-dd" 
+                ng-model="$ctrl.model.effectiveDate" ng-required="true" 
+                ng-change="$ctrl.updateDuration()"
+                current-text="{{ 'Today' | translate }}"
+                clear-text="{{ 'Clear' | translate }}"
+                close-text="{{ 'Done' | translate }}"
+                uib-datepicker-popup is-open="$ctrl.effectiveDateOpened" 
+                datepicker-options="$ctrl.datepickerOptions.effectiveDate"/>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="$ctrl.effectiveDateOpened = !$ctrl.effectiveDateOpened"><span class="glyphicon glyphicon-calendar"></span></button>
+            </span>
+        </div>
+      </div>
+      <!-- Expiration date -->
+      <div class="form-group col-sm-4" ng-class="$ctrl.getClasses('expirationDate', formRequestBond)">
+        <label for="expirationDate" class="control-label">{{ 'Expiration Date' | translate }}</label>
+        <div class="input-group">
+          <input 
+                type="text" id="expirationDate" name="expirationDate" class="form-control" placeholder="yyyy-mm-dd" 
+                min-date="$ctrl.getDateEffectiveDate()"
+                ng-model="$ctrl.model.expirationDate" ng-required="true" ng-change="$ctrl.updateDuration()"
+                current-text="{{ 'Today' | translate }}"
+                clear-text="{{ 'Clear' | translate }}"
+                close-text="{{ 'Done' | translate }}"
+                uib-datepicker-popup is-open="$ctrl.expirationDateOpened"
+                datepicker-options="$ctrl.datepickerOptions.expirationDate"/>
+          <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="$ctrl.expirationDateOpened = !$ctrl.expirationDateOpened"><span class="glyphicon glyphicon-calendar"></span></button>
+            </span>
+        </div>
+      </div>
+      <!-- Duration -->
+      <div class="form-group col-sm-4">
+        <label for="duration" class="control-label">{{ 'Duration' | translate }}</label>
+        <div class="input-group" style="width:100%;">
+          <input
+                type="text" id="duration" name="duration" class="form-control" ng-model="$ctrl.model.durationText" disabled/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Amount -->
+    <div class="row">
+      <div class="form-group col-sm-4" ng-class="$ctrl.getClasses('amount', formRequestBond)">
+        <label for="amount" class="control-label">{{ 'Amount' | translate }}</label>
+        <div class="input-group">
+          <input type="text" id="amount" name="amount" class="form-control" ng-model="$ctrl.filteredAmount" ng-change="$ctrl.updateAmount()" required ui-money-mask="0" currency-format="currency-format"/>
+          <span class="input-group-addon">{{ $ctrl.user.currency.code }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload document -->
+    <div class="form-group">
+      <label class="control-label">{{ 'Upload document/s' | translate }}</label>
+      <div>
+          <!-- 3. nv-file-over uploader="link" over-class="className" -->
+          <div class="well my-drop-zone" nv-file-drop="" nv-file-over="" nv-file-select="" uploader="$ctrl.uploader">
+              {{ 'Drop a file' | translate }}
+          </div>
+          <div class="col-md-9" style="margin-bottom: 40px" ng-if="$ctrl.uploader.queue.length">
+              <p class="ng-binding">{{ 'Queue length' | translate}}: {{ $ctrl.uploader.queue.length}}</p>
+
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th width="50%">{{ 'Name' | translate }}</th>
+                          <th ng-show="uploader.isHTML5">{{ 'Size' | translate }}</th>
+                          <th ng-show="uploader.isHTML5">{{ 'Progress' | translate }}</th>
+                          <th>{{ 'Status' | translate }}</th>
+                          <th>{{'Actions' | translate }}</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="item in $ctrl.uploader.queue">
+                        <td><strong>{{ item.file.name }}</strong></td>
+                        <td ng-show="$ctrl.uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                        <td ng-show="$ctrl.uploader.isHTML5">
+                            <div class="progress" style="margin-bottom: 0;">
+                                <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                            <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                        </td>
+                        <td nowrap>
+                            <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                <span class="glyphicon glyphicon-upload"></span> {{ 'Upload' | translate }}
+                            </button>
+                            <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                <span class="glyphicon glyphicon-ban-circle"></span> {{ 'Cancel' | translate }}
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                <span class="glyphicon glyphicon-trash"></span> {{ 'Remove' | translate }}
+                            </button>
+                        </td>
+                    </tr>
+                  </tbody>
+              </table>
+
+              <div ng-if="$ctrl.uploader.queue.length > 1">
+                  <div>
+                      {{ 'Queue progress' | translate }}:
+                      <div class="progress" style="">
+                          <div class="progress-bar" role="progressbar" ng-style="{ 'width': $ctrl.uploader.progress + '%' }" style="width: 0%;"></div>
+                      </div>
+                  </div>
+                  <button type="button" class="btn btn-success btn-s" ng-click="$ctrl.uploader.uploadAll()" ng-disabled="!$ctrl.uploader.getNotUploadedItems().length">
+                      <span class="glyphicon glyphicon-upload"></span> {{ 'Upload all' | translate }}
+                  </button>
+                  <button type="button" class="btn btn-warning btn-s" ng-click="$ctrl.uploader.cancelAll()" ng-disabled="!$ctrl.uploader.isUploading">
+                      <span class="glyphicon glyphicon-ban-circle"></span> {{ 'Cancel all' | translate }}
+                  </button>
+                  <button type="button" class="btn btn-danger btn-s" ng-click="$ctrl.uploader.clearQueue()" ng-disabled="!$ctrl.uploader.queue.length">
+                      <span class="glyphicon glyphicon-trash"></span> {{ 'Remove all' | translate }}
+                  </button>
+              </div>
+
+          </div>
+      </div>
+    </div>
+
+    <!-- Warnings -->
+    <div class="alert alert-danger" role="alert" ng-if="$ctrl.user.policy && $ctrl.getProgressbarColor() === 'danger'">{{ 'Warning: Your policy limit will be exceeded'  | translate }}</div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn btn-primary pull-right" ng-disabled="formRequestBond.$invalid">{{ 'Request bond' | translate }}</button>
+  </form>
+</div>

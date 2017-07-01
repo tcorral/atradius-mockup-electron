@@ -1,0 +1,78 @@
+<div>
+  <div class="modal-header">
+    <h2>{{ 'Add Beneficiary' | translate }}</h2>
+  </div>
+  <form name="formAddBeneficiary" ng-submit="$ctrl.addBeneficiary()">
+    <div class="modal-body">
+      <!-- Available beneficiaries -->
+      <div ng-if="$ctrl.beneficiaryUsage == 'available'">
+        <div class="form-group" ng-class="$ctrl.getClasses('availableBeneficiaries', formAddBeneficiary)">
+          <label for="availableBeneficiaries" class="control-label">{{ 'Available beneficiaries' | translate }}</label>
+          <input type="text" id="availableBeneficiaries" name="availableBeneficiaries" class="form-control" required ng-model="$ctrl.selectedBeneficiary" uib-typeahead="ab as ab.name for ab in $ctrl.availableBeneficiaries | filter:$viewValue | limitTo:8" typeahead-min-length="0" />
+        </div>
+
+        <!-- Show create beneficiary -->
+        <button type="button" class="btn btn-primary" ng-click="$ctrl.useBeneficiary('new')">{{ 'Create new beneficiary' | translate }}</button>
+      </div>
+
+      <!-- Create new beneficiary -->
+      <div ng-if="$ctrl.beneficiaryUsage == 'new'">
+        <!-- Warning -->
+        <div class="alert alert-warning" role="alert">
+          <strong>{{ 'Reminder' | translate}}</strong><br />
+          {{ 'On creating a new beneficiary it requires the approval of our financial team.' | translate }}
+        </div>
+
+        <!-- Show available beneficiaries -->
+        <button type="button" class="btn btn-primary" ng-click="$ctrl.useBeneficiary('available')" style="margin-bottom: 10px;">{{ 'Use existing beneficiary' | translate }}</button>
+
+        <!-- Name -->
+        <div class="form-group" ng-class="$ctrl.getClasses('name', formAddBeneficiary)">
+          <label for="name" class="control-label">{{ 'Name' | translate }}</label>
+          <input type="text" id="name" name="name" class="form-control" ng-model="$ctrl.beneficiaryModel.name" required />
+        </div>
+
+        <!-- Address -->
+        <div class="form-group" ng-class="$ctrl.getClasses('address', formAddBeneficiary)">
+          <label for="address" class="control-label">{{ 'Address' | translate }}</label>
+          <input type="text" id="address" name="address" class="form-control" ng-model="$ctrl.beneficiaryModel.address" required />
+        </div>
+
+        <!-- Zip code -->
+        <div class="form-group" ng-class="$ctrl.getClasses('zipCode', formAddBeneficiary)">
+          <label for="zipCode" class="control-label">{{ 'Zip code' | translate }}</label>
+          <input type="text" id="zipCode" name="zipCode" class="form-control" ng-model="$ctrl.beneficiaryModel.zipCode" required />
+        </div>
+
+        <!-- City -->
+        <div class="form-group" ng-class="$ctrl.getClasses('city', formAddBeneficiary)">
+          <label for="city" class="control-label">{{ 'City' | translate }}</label>
+          <input type="text" id="city" name="city" class="form-control" ng-model="$ctrl.beneficiaryModel.city" required />
+        </div>
+
+        <!-- Province -->
+        <div class="form-group" ng-class="$ctrl.getClasses('province', formAddBeneficiary)">
+          <label for="province" class="control-label">{{ 'Province' | translate }}</label>
+          <input type="text" id="province" name="province" class="form-control" ng-model="$ctrl.beneficiaryModel.province" required />
+        </div>
+
+        <!-- Country code -->
+        <div class="form-group" ng-class="$ctrl.getClasses('countryCode', formAddBeneficiary)">
+          <label for="countryCode" class="control-label">{{ 'Country code' | translate }}</label>
+          <input type="text" id="countryCode" name="countryCode" class="form-control" ng-model="$ctrl.beneficiaryModel.countryCode" required />
+        </div>
+
+        <!-- Fiscal code -->
+        <div class="form-group" ng-class="$ctrl.getClasses('fiscalCode', formAddBeneficiary)">
+          <label for="fiscalCode" class="control-label">{{ 'Fiscal code' | translate }}</label>
+          <input type="text" id="fiscalCode" name="fiscalCode" class="form-control" ng-model="$ctrl.beneficiaryModel.fiscalCode" required />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <!-- TODO: Make more responsive -->
+      <button type="button" class="btn btn-default pull-left" ng-click="$ctrl.close()">{{ 'Cancel' | translate }}</button>
+      <button typeof="submit" class="btn btn-success pull-right" ng-disabled="formAddBeneficiary.$invalid">{{ 'Add beneficiary' | translate }}</button>
+    </div>
+  </form>
+</div>

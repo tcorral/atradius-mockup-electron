@@ -1,0 +1,1 @@
+module.exports = require("github:lgalfaso/angular-dynamic-locale@0.1.32/dist/tmhDynamicLocale");

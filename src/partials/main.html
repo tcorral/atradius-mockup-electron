@@ -1,0 +1,22 @@
+<div class="container" ng-controller="RequestBondController as $ctrl">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+        <!-- Language dropdown -->
+        <!-- TODO Replace with Angular UI dropdown -->
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            {{ 'changeLanguage' | translate }}
+            <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+            <li ng-class="{disabled: $ctrl.currentLanguage == 'nl_NL'}"><a href="#" ng-click="$ctrl.changeLanguage('nl_NL')">NL</a></li>
+            <li ng-class="{disabled: $ctrl.currentLanguage == 'en_US'}"><a href="#" ng-click="$ctrl.changeLanguage('en_US')">EN</a></li>
+            </ul>
+        </div>
+        </div>
+        <div class="panel-body">
+        <!-- UI View -->
+        <ui-view></ui-view>
+        </div>
+    </div>
+</div>

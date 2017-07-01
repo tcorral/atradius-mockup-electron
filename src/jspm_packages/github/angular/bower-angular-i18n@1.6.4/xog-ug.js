@@ -1,0 +1,4 @@
+/* */ 
+"format cjs";
+require('./angular-locale_xog-ug');
+module.exports = 'ngLocale';

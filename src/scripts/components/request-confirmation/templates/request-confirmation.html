@@ -1,0 +1,30 @@
+<h3>{{ 'Request Confirmation' | translate }}</h3>
+
+<div class="table-responsive">
+  <!-- Tables -->
+  <table class="table table-striped table-hover" ng-repeat="(key, value) in $ctrl.requestModel">
+    <thead>
+      <tr>
+        <th>
+          <span style="cursor: pointer;" ng-click="value.isCollapsed = !value.isCollapsed">
+            <span class="glyphicon" style="margin-right: 5px;" ng-class="{
+              'glyphicon-chevron-down' : !value.isCollapsed,
+              'glyphicon-chevron-right' : value.isCollapsed
+            }"></span>
+            {{ value.type | translate }}
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody uib-collapse="value.isCollapsed">
+      <tr  ng-class="{ 'bottom-border': $last }" ng-repeat="(valueKey, valueValue) in value" ng-if="valueKey != 'type'">
+        <td class="col-xs-4" ng-if="valueKey != 'isCollapsed'"><strong>{{ valueKey | translate }}</strong></td>
+        <td class="col-xs-8" ng-if="valueKey != 'isCollapsed'">{{ valueValue }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<button class="btn btn-default" ng-click="$ctrl.goBack()">{{ 'Back' | translate }}</button>
+<button class="btn btn-primary pull-right" ng-click="$ctrl.sendRequest()">{{ 'Send request' | translate }}</button>
+<button class="btn btn-primary pull-right" style="margin-right: 20px;" ng-click="$ctrl.save()">{{ 'Save' | translate }}</button>

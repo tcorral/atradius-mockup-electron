@@ -1,0 +1,1 @@
+module.exports = require("npm:string-mask@0.3.0/src/string-mask.js");

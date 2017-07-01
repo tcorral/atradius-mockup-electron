@@ -1,0 +1,1 @@
+module.exports = require("github:angular/bower-angular-touch@1.6.4/angular-touch");

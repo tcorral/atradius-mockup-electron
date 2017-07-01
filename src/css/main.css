@@ -1,0 +1,78 @@
+body {
+  background-color: #f9f9f9;
+  margin: 20px 0;
+}
+
+.my-drop-zone { border: dotted 3px lightgray; }
+.list-of-cars-body .row{
+    margin: 10px;
+}
+.nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+.another-file-over-class { border: dotted 3px green; }
+
+.file-list li i.glyphicon-remove {
+  color: red;
+}
+body {
+  background-color: #f9f9f9;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+/* Header */
+header {
+  margin-bottom: 20px;
+}
+
+.header-line {
+  background-color: #db0028;
+  height: 10px;
+  margin-bottom:20px;
+  position: relative;
+}
+
+.header-line-border {
+  background-image: url('../img/header-border.png');
+  height: 10px;
+  position: absolute;
+  right: 0;
+  width: 549px;
+}
+
+/* Loaders */
+.appLoader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #db0028;
+  margin: 20px auto;
+  height: 120px;
+  width: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+.requestProcessingLoader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #db0028;
+  margin: 20px auto;
+  height: 120px;
+  width: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.bottom-border {
+  border-bottom: 1px solid lightgrey;
+}
