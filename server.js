@@ -5,12 +5,23 @@ var path = require('path');
 var mime = require('mime');
 
 function handleRequest(req, res) {
-    var file = path.join(app.getAppPath() + '/src', req.url);
+    var url = req.url;
+    switch(req.url) {
+        case '/home':
+        case '/request-approved':
+        case '/request-confirmation':
+        case '/request-declined':
+        case '/request-processing':
+        case '/manual-approval':
+            url = '/';
+    }
+    
+    var file = path.join(app.getAppPath() + '/src', url);
 
-    if(req.url === '/') {
+    if(url === '/') {
         file += 'index.html';
     }
-    console.log(file, req.url);
+    console.log(file, url, req.url);
     
     fs.exists(file, function(exists) {
         if (exists && fs.lstatSync(file).isFile()) {

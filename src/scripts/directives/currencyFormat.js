@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import EventBus from 'krasimir/EventBus';
-
+debugger;
 $.fn.priceFormat = function(options) {
   const defaults = {
     prefix: 'US$ ',
@@ -210,20 +210,20 @@ function currencyFormat($filter) {
           centsLimit: 0
         };
         elem[0].value = ctrl.$modelValue + '0';
-        elem.priceFormat(format);
+        $(elem).priceFormat(format);
 
         elem[0].value = ctrl.$modelValue;
-        elem.priceFormat(format);
+        $(elem).priceFormat(format);
       });
 
       ctrl.$parsers.unshift((value) => {
-        elem.priceFormat(format);
+        $(elem).priceFormat(format);
         return elem[0].value;
       });
 
       ctrl.$formatters.unshift((value) => {
         elem[0].value = ctrl.$modelValue * 100;
-        elem.priceFormat(format);
+        $(elem).priceFormat(format);
         return elem[0].value;
       });
     }
